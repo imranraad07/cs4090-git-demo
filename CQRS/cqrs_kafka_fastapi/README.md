@@ -80,6 +80,12 @@ Read Messages from a Topic (Consumer CLI):
 bin/kafka-console-producer.sh --topic order_events --bootstrap-server localhost:9092
 ```
 
+Read Messages from a Topic (Producer CLI):
+```
+bin/kafka-console-consumer.sh --topic order_events --bootstrap-server localhost:9092
+```
+
+
 Delete a Topic (DONT DO IT UNLESS YOU ACTUALLY WANT IT)
 ```
 bin/kafka-topics.sh --delete --topic order_events --bootstrap-server localhost:9092

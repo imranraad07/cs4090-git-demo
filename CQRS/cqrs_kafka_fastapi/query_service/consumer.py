@@ -15,8 +15,8 @@ class KafkaEventConsumer:
         self.consumer = AIOKafkaConsumer(
             self.topic,
             bootstrap_servers=self.bootstrap_servers,
-            value_deserializer=lambda v: json.loads(v.decode("utf-8")),
-            auto_offset_reset="earliest",
+            value_deserializer=self.safe_deserializer,
+            auto_offset_reset="latest",      # Skip old messages
             enable_auto_commit=True
         )
         await self.consumer.start()
@@ -29,5 +29,20 @@ class KafkaEventConsumer:
     async def consume_loop(self):
         assert self.consumer
         async for msg in self.consumer:
-            event = DomainEvent(**msg.value)
-            self.handler.handle(event)
+            if not msg.value:
+                continue
+            try:
+                event = DomainEvent(**msg.value)
+                self.handler.handle(event)
+            except Exception as e:
+                print(f"[ERROR] Failed to process message: {e}")
+
+    @staticmethod
+    def safe_deserializer(v: bytes):
+        if not v:
+            return None
+        try:
+            return json.loads(v.decode("utf-8"))
+        except Exception as e:
+            print(f"[WARN] Invalid Kafka message: {e}")
+            return None
