@@ -28,7 +28,6 @@ CQRS service will start on http://127.0.0.1:8000
 
 ## verify:
 http://127.0.0.1:8000/docs
-
 This is the Swagger UI that FastAPI generates automatically. You will see all available endpoints there.
 
 ## Example:
@@ -43,7 +42,6 @@ Response Json:
 
 Get all orders:
 curl http://127.0.0.1:8000/orders
-
 
 Get order by ID:
 curl http://127.0.0.1:8000/orders/550e8400-e29b-41d4-a716-446655440000

@@ -41,21 +41,57 @@ Use **two terminals**:
 
 **Terminal 1:**
 
-```bash
+```
 bin/zookeeper-server-start.sh config/zookeeper.properties
 ```
 
 **Terminal 2:**
 
-```bash
+```
 bin/kafka-server-start.sh config/server.properties
 ```
 
 ### 4. Create Kafka Topic
 
-```bash
+```
 bin/kafka-topics.sh --create --topic order_events --bootstrap-server localhost:9092
 ```
+
+### Investigate Topic:
+
+List All Topics:
+
+```
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+```
+
+Describe a Specific Topic:
+```
+bin/kafka-topics.sh --describe --topic order_events --bootstrap-server localhost:9092
+```
+What it shows:
+- PartitionCount: How many partitions the topic has.
+- ReplicationFactor: How many copies of each partition exist (for fault tolerance).
+- Leader: Which broker handles writes for that partition.
+- ISR (In-Sync Replicas): Brokers currently in sync with the leader.
+
+Read Messages from a Topic (Consumer CLI):
+```
+bin/kafka-console-producer.sh --topic order_events --bootstrap-server localhost:9092
+```
+
+Delete a Topic (DONT DO IT UNLESS YOU ACTUALLY WANT IT)
+```
+bin/kafka-topics.sh --delete --topic order_events --bootstrap-server localhost:9092
+```
+
+| Purpose          | Command                           |
+| ---------------- | --------------------------------- |
+| List topics      | `--list`                          |
+| Describe topic   | `--describe --topic order_events` |
+| Produce messages | `kafka-console-producer.sh`       |
+| Consume messages | `kafka-console-consumer.sh`       |
+| Delete topic     | `--delete --topic order_events`   |
 
 
 ## Run the Services
@@ -64,14 +100,14 @@ Use separate terminals for each service.
 
 ### **Terminal 1: Query Service**
 
-```bash
+```
 cd query_service
 uvicorn main:app --port 8001
 ```
 
 ### **Terminal 2: Command Service**
 
-```bash
+```
 cd command_service
 uvicorn main:app --port 8000
 ```
@@ -82,7 +118,7 @@ uvicorn main:app --port 8000
 
 ### Create an Order
 
-```bash
+```
 curl -X POST http://127.0.0.1:8000/orders \
      -H "Content-Type: application/json" \
      -d '{"customer": "Alice", "items": ["pen", "notebook"]}'
@@ -96,13 +132,13 @@ Response:
 
 ### List All Orders
 
-```bash
+```
 curl http://127.0.0.1:8001/orders
 ```
 
 Expected:
 
-```json
+```
 [
   {
     "id": "some-uuid",
@@ -139,6 +175,5 @@ cqrs_kafka_fastapi/
 ## Notes
 
 * **run each service from inside its own folder** (`cd command_service` or `cd query_service`)
-  This ensures imports like `from db import ReadDB` work correctly.
 * Both services communicate asynchronously through Kafka.
 * Each service can be scaled independently.
