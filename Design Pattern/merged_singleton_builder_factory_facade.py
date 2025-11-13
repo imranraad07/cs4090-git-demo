@@ -166,8 +166,8 @@ st.subheader("Place Order")
 if st.button("Place Order"):
     facade = OrderFacade(logger)
     output = facade.place_order(product, processor, amount)
-    for entry in output:
-        st.success(entry)
+    # for entry in output:
+    #     st.success(entry)
 
 ############################################################
 # Log output
