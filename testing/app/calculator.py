@@ -1,5 +1,10 @@
-def add(a, b): return a + b
+def add(a, b): 
+    return a + b
+
 def divide(a, b):
-    if b == 0: raise ZeroDivisionError("Division by zero")
+    if b == 0: 
+        raise ZeroDivisionError("Division by zero")
     return a / b
-def square(x): return x * x
+
+def square(x): 
+    return x * x

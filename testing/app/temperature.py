@@ -1,3 +1,7 @@
+import sys 
+import os 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 class Temperature:
     def __init__(self, value, unit="C"):
         if not isinstance(value, (int, float)):

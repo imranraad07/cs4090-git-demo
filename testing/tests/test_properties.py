@@ -1,3 +1,7 @@
+import sys 
+import os 
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from hypothesis import given
 import hypothesis.strategies as st
 from app.calculator import add, square
